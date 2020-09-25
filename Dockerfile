@@ -5,12 +5,12 @@ COPY interface/interface.proto ./interface/interface.proto
 COPY pkg/interface pkg/interface
 RUN ["make", "clean", "protobuf"]
 
-FROM golang:latest as go-builder
+FROM golang:1.15.2-alpine3.12 as go-builder
 WORKDIR /work
 COPY --from=protoc-builder /work/pkg/interface /work/pkg/interface
 COPY . .
-RUN ["make", "compile"]
+RUN ["sh", "./scripts/build.sh", "unstacker", "linux", "amd64"]
 
-FROM debian:buster-slim
+FROM alpine:3.12.0
 COPY --from=go-builder /work/bin /app/bin
 CMD ["/app/bin/linux/amd64/unstacker"]
