@@ -7,8 +7,8 @@ protobuf: interface/interface.proto | $(PROTOC_GEN_GO)
 	protoc --go_out=paths=source_relative:./pkg interface/interface.proto
 
 compile:
-	./scripts/build.sh mqtt-transformer linux amd64
-	./scripts/build.sh mqtt-transformer linux arm64
+	./scripts/build.sh unstacker linux amd64
+	./scripts/build.sh unstacker linux arm64
 	./scripts/build.sh sender linux amd64
 
 clean:
@@ -17,7 +17,7 @@ clean:
 	rm pkg/interface/*.pb.go || true
 
 run:
-	go run ./cmd/mqtt-transformer -config ./configs/config.yaml
+	go run ./cmd/unstacker -config ./configs/config.yaml
 
 all: clean protobuf compile
 

@@ -1,4 +1,4 @@
-module github.com/Senso-Care/daemons
+module github.com/Senso-Care/Unstacker
 
 go 1.15
 

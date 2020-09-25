@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Senso-Care/daemons/internal/communication"
-	"github.com/Senso-Care/daemons/internal/config"
+	"github.com/Senso-Care/Unstacker/internal/communication"
+	"github.com/Senso-Care/Unstacker/internal/config"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"runtime"

@@ -3,8 +3,8 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/Senso-Care/daemons/internal/config"
-	messages "github.com/Senso-Care/daemons/pkg/interface"
+	"github.com/Senso-Care/Unstacker/internal/config"
+	messages "github.com/Senso-Care/Unstacker/pkg/interface"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"

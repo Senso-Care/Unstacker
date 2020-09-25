@@ -16,6 +16,8 @@ const (
 	MqPort          = 1883
 	MqTopic         = "/senso-care/sensors/+"
 	MqQos           = 0
+	MqUsername      = ""
+	MqPassword      = ""
 	DbConnectionUri = "http://localhost:9999"
 	Cores           = 0
 )
@@ -56,8 +58,8 @@ func initViper() *viper.Viper {
 	viperConf.SetDefault("MqServer.hostip", MqHostIp)
 	viperConf.SetDefault("MqServer.port", MqPort)
 	viperConf.SetDefault("MqServer.topic", MqTopic)
-	viperConf.SetDefault("MqServer.username", "")
-	viperConf.SetDefault("MqServer.password", "")
+	viperConf.SetDefault("MqServer.username", MqUsername)
+	viperConf.SetDefault("MqServer.password", MqPassword)
 	viperConf.SetDefault("MqServer.QOS", MqQos)
 	viperConf.SetDefault("Database.ConnectionUri", DbConnectionUri)
 	viperConf.SetDefault("Cores", Cores)
@@ -107,7 +109,7 @@ func bindFlags(v *viper.Viper) {
 }
 
 func loadConfigFile(v *viper.Viper) {
-	configurationPath := v.GetString("config")
+	configurationPath := pflag.Lookup("config").Value.String()
 	if len(configurationPath) >= 0 {
 		file, err := os.Stat(configurationPath)
 		if os.IsNotExist(err) {
@@ -116,7 +118,6 @@ func loadConfigFile(v *viper.Viper) {
 			if file.IsDir() {
 				v.SetConfigName("config")
 				v.AddConfigPath(configurationPath)
-
 			} else {
 				v.AddConfigPath(path.Dir(configurationPath))
 				filename := path.Base(configurationPath)

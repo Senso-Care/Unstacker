@@ -9,4 +9,4 @@ fi
 cmd_path="./cmd/$1"
 
 echo "Compiling $1 on $2/$3"
-GOOS=$2 GOARCH=$3 go build -o="bin/$2/$3/$1" -mod=vendor "github.com/Senso-Care/daemons/$cmd_path"
+GOOS=$2 GOARCH=$3 go build -o="bin/$2/$3/$1" -mod=vendor "github.com/Senso-Care/Unstacker/$cmd_path"

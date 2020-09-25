@@ -13,4 +13,4 @@ RUN ["make", "compile"]
 
 FROM debian:buster-slim
 COPY --from=go-builder /work/bin /app/bin
-CMD ["/app/bin/linux/amd64/mqtt-transformer"]
+CMD ["/app/bin/linux/amd64/unstacker"]

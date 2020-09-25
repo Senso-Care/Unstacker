@@ -3,8 +3,8 @@ package communication
 import (
 	"crypto/tls"
 	"encoding/json"
-	"github.com/Senso-Care/daemons/internal/config"
-	messages "github.com/Senso-Care/daemons/pkg/interface"
+	"github.com/Senso-Care/Unstacker/internal/config"
+	messages "github.com/Senso-Care/Unstacker/pkg/interface"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
