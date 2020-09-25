@@ -2,6 +2,11 @@
 
 Unstacker is a project from the Senso Care team. It's goal is to read messages from a MQ Server implementing the MQTT protocol and insert them into a database.
 
+## Checkout project
+
+Use `git clone --recurse-submodules git@github.com:Senso-Care/Unstacker.git` to checkout the project including submodules ! (you will miss the interface.proto file if you don't)
+
+https version: `git clone --recurse-submodules https://github.com/Senso-Care/Unstacker.git`
 
 ## Build local
 To build unstacker you need Go, Protoc, Protoc-gen-go
