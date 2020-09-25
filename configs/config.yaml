@@ -1,0 +1,11 @@
+
+mqserver:
+  hostip: 127.0.0.1
+  port: 1883
+  topic: /senso-care/sensors/+
+  username: artemis
+  password: artemis
+  qos: 0
+database:
+  connectionuri: http://localhost:9999
+cores: 6
