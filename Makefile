@@ -7,9 +7,9 @@ protobuf: interface/interface.proto | $(PROTOC_GEN_GO)
 	protoc --go_out=paths=source_relative:./pkg interface/interface.proto
 
 compile:
-	./scripts/build.sh unstacker linux amd64
-	./scripts/build.sh unstacker linux arm64
-	./scripts/build.sh sender linux amd64
+	./scripts/build.sh unstacker linux/amd64
+	./scripts/build.sh unstacker linux/arm64
+	#./scripts/build.sh sender linux/amd64
 
 clean:
 	echo "Cleaning build directory"

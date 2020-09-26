@@ -16,7 +16,10 @@ Simply run `make all` from the root directory, and everything will be built.
 ## Build docker
 If you don't have the necessary dependencies, or don't wish to. You can build this projet using Docker.
 
-Simply run `docker build . -t unstacker:latest`.
+
+This Dockerfile was created with docker buildx in mind:
+
+`docker buildx build . -t unstacker:latest`
 
 ## Configuration
 

@@ -1,12 +1,19 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ] || ! [ -d "./cmd/$1" ] || ! go tool dist list | grep "$2"/"$3" > /dev/null; then
-  echo "Usage: $0 CMDNAME OS PLATFORM" >&2
+if [ "$#" -lt 1 ] || ! [ -d "./cmd/$1" ] > /dev/null; then
+  echo "Usage: $0 CMDNAME [OS/PLATFORM]" >&2
   echo "Check os/platform available by running: \"go tool dist list\""
   exit 1
 fi
 
-cmd_path="./cmd/$1"
+os="linux"
+platform="amd64"
 
-echo "Compiling $1 on $2/$3"
-GOOS=$2 GOARCH=$3 go build -o="bin/$2/$3/$1" -mod=vendor "github.com/Senso-Care/Unstacker/$cmd_path"
+if [ ! -z "$2" ] && go tool dist list | grep "$2" > /dev/null; then
+  os=$(echo "$2" | cut -d"/" -f1)
+  platform=$(echo "$2" | cut -d"/" -f2)
+fi
+
+cmd_path="./cmd/$1"
+echo "Compiling $1 on $os/$platform"
+GOOS=$os GOARCH=$platform go build -o="bin/$2/$1" -mod=vendor "github.com/Senso-Care/Unstacker/$cmd_path"
