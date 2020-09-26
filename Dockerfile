@@ -7,10 +7,11 @@ RUN ["make", "clean", "protobuf"]
 
 FROM golang:1.15.2-alpine3.12 as go-builder
 WORKDIR /work
-COPY --from=protoc-builder /work/pkg/interface /work/pkg/interface
+COPY --from=protoc-builder /work/pkg/ .
 COPY . .
-RUN ["sh", "./scripts/build.sh", "unstacker", "linux", "amd64"]
+RUN go mod vendor
+RUN sh ./scripts/build.sh unstacker linux amd64
 
 FROM alpine:3.12.0
-COPY --from=go-builder /work/bin /app/bin
-CMD ["/app/bin/linux/amd64/unstacker"]
+COPY --from=go-builder /work/bin/linux/amd64 /app/bin
+CMD ["/app/bin/unstacker"]

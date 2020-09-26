@@ -1,0 +1,4 @@
+bin/*
+vendor/*
+!vendor/modules.txt
+Dockerfile

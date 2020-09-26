@@ -60,7 +60,7 @@ func main() {
 	}
 	i := 0
 	start := uint64(time.Now().Unix())
-	timeToWait := uint64(5)
+	timeToWait := uint64(1)
 	for {
 		timestamp := uint64(time.Now().Unix())
 		if timestamp-start >= timeToWait {

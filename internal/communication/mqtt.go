@@ -35,7 +35,7 @@ func writeToDisk(measure *messages.Measure) {
 	if bytes, err := json.Marshal(measure); err != nil {
 		log.Error("Error while serializing to JSON ", err)
 	} else {
-		if err := ioutil.WriteFile("/tmp/go/" + strconv.Itoa(time.Now().Nanosecond()), bytes, 0644); err != nil {
+		if err := ioutil.WriteFile("/tmp/go/"+strconv.Itoa(time.Now().Nanosecond()), bytes, 0644); err != nil {
 			log.Error("Error while writing to disk", err)
 		}
 	}
@@ -64,7 +64,6 @@ func createConnectionOptions(configuration *config.MqServerConfiguration, broker
 	return connOpts
 }
 
-
 func Listen(configuration *config.MqServerConfiguration) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -75,12 +74,13 @@ func Listen(configuration *config.MqServerConfiguration) {
 
 	client := MQTT.NewClient(connOpts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		log.Panic("Error connecting to server")
+		log.Debug("Error connecting to server")
 		panic(token.Error())
 	} else {
 		log.Infof("Connected to %s\n", broker)
 	}
 
 	<-c
+	client.Disconnect(10)
 	log.Info("Graceful shutdown")
 }
