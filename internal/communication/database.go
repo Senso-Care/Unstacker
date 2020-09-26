@@ -29,10 +29,9 @@ func errorLogger(errorChannel <-chan error) {
 
 func MeasureToPoint(measure *messages.Measure, sensor *string) *write.Point {
 	measurement := strings.Split(*sensor, "-")[0]
-
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("sensor", *sensor).
-		AddField("v", measure.Value).
+		AddField("v", fmt.Sprintf("%f", *measure.Value)).
 		SetTime(time.Unix(int64(*measure.Timestamp), 0))
 	return point
 }
