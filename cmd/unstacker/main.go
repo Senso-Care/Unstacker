@@ -22,6 +22,8 @@ func main() {
 	}).Debug("Server address loaded from configuration")
 	log.WithField("GOMAXPROCS", configuration.Cores).Debug("Setting max number of cpus")
 	runtime.GOMAXPROCS(configuration.Cores)
-	communication.Listen(&configuration.MqServer)
+	influxClient, writeApi := communication.Connect(&configuration.Database)
+	communication.Listen(&configuration.MqServer, &writeApi)
+	influxClient.Close()
 
 }

@@ -56,11 +56,11 @@ func main() {
 	fmt.Printf("Connected to %s\n", broker)
 	topics := [100]string{}
 	for i := 0; i < 100; i++ {
-		topics[i] = "far-" + strconv.Itoa(rand.Int())
+		topics[i] = "temperature-" + strconv.Itoa(rand.Int())
 	}
 	i := 0
 	start := uint64(time.Now().Unix())
-	timeToWait := uint64(1)
+	timeToWait := uint64(10)
 	for {
 		timestamp := uint64(time.Now().Unix())
 		if timestamp-start >= timeToWait {
@@ -79,6 +79,8 @@ func main() {
 			i += 1
 			log.Printf("Message sent to %s, nb %d", topic, i)
 		}
+		time.Sleep(time.Second)
 	}
+	client.Disconnect(10)
 	fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, timeToWait, float64(i)/float64(timeToWait))
 }
