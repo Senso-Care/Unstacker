@@ -3,7 +3,7 @@ FROM grpc/go as protoc-builder
 WORKDIR /work
 COPY Makefile .
 COPY interface/interface.proto ./interface/interface.proto
-COPY pkg/interface pkg/interface
+COPY pkg pkg
 RUN protoc --go_out=paths=source_relative:./pkg interface/interface.proto
 
 FROM golang:1.15.2-alpine3.12 as go-builder
