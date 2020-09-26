@@ -1,3 +1,6 @@
+# github.com/deepmap/oapi-codegen v1.3.6
+github.com/deepmap/oapi-codegen/pkg/runtime
+github.com/deepmap/oapi-codegen/pkg/types
 # github.com/eclipse/paho.mqtt.golang v1.2.0
 ## explicit
 github.com/eclipse/paho.mqtt.golang
@@ -18,14 +21,40 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
+# github.com/influxdata/influxdb-client-go/v2 v2.0.1
+## explicit
+github.com/influxdata/influxdb-client-go/v2
+github.com/influxdata/influxdb-client-go/v2/api
+github.com/influxdata/influxdb-client-go/v2/api/http
+github.com/influxdata/influxdb-client-go/v2/api/query
+github.com/influxdata/influxdb-client-go/v2/api/write
+github.com/influxdata/influxdb-client-go/v2/domain
+github.com/influxdata/influxdb-client-go/v2/internal/gzip
+github.com/influxdata/influxdb-client-go/v2/internal/http
+github.com/influxdata/influxdb-client-go/v2/internal/log
+github.com/influxdata/influxdb-client-go/v2/internal/write
+github.com/influxdata/influxdb-client-go/v2/log
+# github.com/influxdata/line-protocol v0.0.0-20200327222509-2487e7298839
+github.com/influxdata/line-protocol
 # github.com/konsorten/go-windows-terminal-sequences v1.0.3
 github.com/konsorten/go-windows-terminal-sequences
+# github.com/labstack/echo/v4 v4.1.11
+github.com/labstack/echo/v4
+# github.com/labstack/gommon v0.3.0
+github.com/labstack/gommon/color
+github.com/labstack/gommon/log
 # github.com/magiconair/properties v1.8.1
 github.com/magiconair/properties
+# github.com/mattn/go-colorable v0.1.4
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.10
+github.com/mattn/go-isatty
 # github.com/mitchellh/mapstructure v1.1.2
 github.com/mitchellh/mapstructure
 # github.com/pelletier/go-toml v1.2.0
 github.com/pelletier/go-toml
+# github.com/pkg/errors v0.9.1
+github.com/pkg/errors
 # github.com/sirupsen/logrus v1.6.0
 ## explicit
 github.com/sirupsen/logrus
@@ -44,14 +73,24 @@ github.com/spf13/pflag
 github.com/spf13/viper
 # github.com/subosito/gotenv v1.2.0
 github.com/subosito/gotenv
-# golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v1.1.0
+github.com/valyala/fasttemplate
+# golang.org/x/crypto v0.0.0-20191112222119-e1110fd1c708
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# golang.org/x/net v0.0.0-20191112182307-2180aed22343
+golang.org/x/net/idna
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
 golang.org/x/net/websocket
-# golang.org/x/sys v0.0.0-20190624142023-c5567b49c5d0
+# golang.org/x/sys v0.0.0-20191115151921-52ab43148777
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
+golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 # google.golang.org/protobuf v1.25.0
 ## explicit

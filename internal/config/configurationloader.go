@@ -12,20 +12,24 @@ import (
 )
 
 const (
-	MqHostIp        = "127.0.0.1"
-	MqPort          = 1883
-	MqTopic         = "/senso-care/sensors/+"
-	MqQos           = 0
-	MqUsername      = ""
-	MqPassword      = ""
-	DbConnectionUri = "http://localhost:9999"
-	Cores           = 0
+	MqHostIp          = "127.0.0.1"
+	MqPort            = 1883
+	MqTopic           = "/senso-care/sensors/+"
+	MqQos             = 0
+	MqUsername        = ""
+	MqPassword        = ""
+	DbConnectionUri   = "http://localhost:9999"
+	DbUsername        = ""
+	DbPassword        = ""
+	DbName            = "sensocare"
+	DbRetentionPolicy = "one_month"
+	Cores             = 0
 )
 
 func defaultConfiguration() Configuration {
 	return Configuration{
-		MqServer: MqServerConfiguration{HostIp: MqHostIp, Port: MqPort, Topic: MqTopic, Username: "", Password: "", QOS: MqQos},
-		Database: DatabaseConfiguration{ConnectionUri: DbConnectionUri},
+		MqServer: MqServerConfiguration{HostIp: MqHostIp, Port: MqPort, Topic: MqTopic, Username: MqUsername, Password: MqPassword, QOS: MqQos},
+		Database: DatabaseConfiguration{ConnectionUri: DbConnectionUri, DbName: DbName, RetentionPolicy: DbRetentionPolicy, Username: DbUsername, Password: DbPassword},
 		Cores:    Cores,
 	}
 }
@@ -62,6 +66,10 @@ func initViper() *viper.Viper {
 	viperConf.SetDefault("MqServer.password", MqPassword)
 	viperConf.SetDefault("MqServer.QOS", MqQos)
 	viperConf.SetDefault("Database.ConnectionUri", DbConnectionUri)
+	viperConf.SetDefault("Database.Username", DbUsername)
+	viperConf.SetDefault("Database.Password", DbPassword)
+	viperConf.SetDefault("Database.DbName", DbName)
+	viperConf.SetDefault("Database.RetentionPolicy", DbRetentionPolicy)
 	viperConf.SetDefault("Cores", Cores)
 	viperConf.SetEnvPrefix("senso_care")
 	viperConf.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -80,6 +88,10 @@ func createFlags() {
 	pflag.String("mq-password", "", "Message queue Server password")
 	pflag.Int("mq-qos", MqQos, "Message queue Server quality of service")
 	pflag.String("db-connection-uri", DbConnectionUri, "Database connection uri")
+	pflag.String("db-name", DbName, "Database name")
+	pflag.String("db-retention-policy", DbRetentionPolicy, "Database retention policy")
+	pflag.String("db-username", DbUsername, "Database username")
+	pflag.String("db-password", DbPassword, "Database password")
 	pflag.Int("cores", Cores, "Number of cores to use")
 	pflag.Parse()
 	if *generateDefaultConfiguration {
@@ -105,6 +117,10 @@ func bindFlags(v *viper.Viper) {
 	bindFlag(v, "MqServer.password", "mq-password")
 	bindFlag(v, "MqServer.QOS", "mq-qos")
 	bindFlag(v, "Database.ConnectionUri", "db-connection-uri")
+	bindFlag(v, "Database.DbName", "db-name")
+	bindFlag(v, "Database.RetentionPolicy", "db-retention-policy")
+	bindFlag(v, "Database.Username", "db-username")
+	bindFlag(v, "Database.Password", "db-password")
 	bindFlag(v, "Cores", "cores")
 }
 

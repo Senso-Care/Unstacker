@@ -2,14 +2,14 @@ package communication
 
 import (
 	"crypto/tls"
-	"encoding/json"
 	"github.com/Senso-Care/Unstacker/internal/config"
 	messages "github.com/Senso-Care/Unstacker/pkg/interface"
 	"github.com/golang/protobuf/proto"
+	"github.com/influxdata/influxdb-client-go/v2/api"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
 	"os"
 	"os/signal"
+	"path"
 	"strconv"
 	"syscall"
 	"time"
@@ -17,31 +17,17 @@ import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
-func onMessageReceived(client MQTT.Client, message MQTT.Message) {
-	log.Debugf("Received message on topic: %s", message.Topic())
-	go parse(message.Payload())
-}
-
-func parse(bytes []byte) {
+func parseAndInsert(bytes []byte, topic *string, writeAPI *api.WriteAPI) {
 	measure := messages.Measure{}
 	if err := proto.Unmarshal(bytes, &measure); err != nil {
 		log.Error("Error while decoding protobuf message ", err)
 	} else {
-		writeToDisk(&measure)
+		sensor := path.Base(*topic)
+		InsertMeasure(*writeAPI, &measure, &sensor)
 	}
 }
 
-func writeToDisk(measure *messages.Measure) {
-	if bytes, err := json.Marshal(measure); err != nil {
-		log.Error("Error while serializing to JSON ", err)
-	} else {
-		if err := ioutil.WriteFile("/tmp/go/"+strconv.Itoa(time.Now().Nanosecond()), bytes, 0644); err != nil {
-			log.Error("Error while writing to disk", err)
-		}
-	}
-}
-
-func createConnectionOptions(configuration *config.MqServerConfiguration, broker *string) *MQTT.ClientOptions {
+func createConnectionOptions(configuration *config.MqServerConfiguration, broker *string, onMessageReceived *func(MQTT.Client, MQTT.Message)) *MQTT.ClientOptions {
 	hostname, _ := os.Hostname()
 	clientid := hostname + strconv.Itoa(time.Now().Second())
 	connOpts := MQTT.NewClientOptions().AddBroker(*broker).SetClientID(clientid).SetCleanSession(true)
@@ -55,7 +41,7 @@ func createConnectionOptions(configuration *config.MqServerConfiguration, broker
 	connOpts.SetTLSConfig(tlsConfig)
 
 	connOpts.OnConnect = func(c MQTT.Client) {
-		if token := c.Subscribe(configuration.Topic, byte(configuration.QOS), onMessageReceived); token.Wait() && token.Error() != nil {
+		if token := c.Subscribe(configuration.Topic, byte(configuration.QOS), *onMessageReceived); token.Wait() && token.Error() != nil {
 			log.Panicf("Error subscribing to topic %s", configuration.Topic)
 			panic(token.Error())
 		}
@@ -64,13 +50,17 @@ func createConnectionOptions(configuration *config.MqServerConfiguration, broker
 	return connOpts
 }
 
-func Listen(configuration *config.MqServerConfiguration) {
+func Listen(configuration *config.MqServerConfiguration, writeAPI *api.WriteAPI) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
 	broker := "tcp://" + configuration.HostIp + ":" + strconv.Itoa(configuration.Port)
-
-	connOpts := createConnectionOptions(configuration, &broker)
+	onMessageReceived := func(client MQTT.Client, message MQTT.Message) {
+		log.Debugf("Received message on topic: %s", message.Topic())
+		topic := message.Topic()
+		go parseAndInsert(message.Payload(), &topic, writeAPI)
+	}
+	connOpts := createConnectionOptions(configuration, &broker, &onMessageReceived)
 
 	client := MQTT.NewClient(connOpts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {

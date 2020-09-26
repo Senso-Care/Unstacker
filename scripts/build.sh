@@ -14,6 +14,11 @@ if [ ! -z "$2" ] && go tool dist list | grep "$2" > /dev/null; then
   platform=$(echo "$2" | cut -d"/" -f2)
 fi
 
+if [ "$2" == "linux/arm/v7" ]; then
+  os="linux"
+  platform="arm"
+fi
+
 cmd_path="./cmd/$1"
 echo "Compiling $1 on $os/$platform"
 GOOS=$os GOARCH=$platform go build -o="bin/$2/$1" -mod=vendor "github.com/Senso-Care/Unstacker/$cmd_path"

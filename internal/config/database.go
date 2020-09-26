@@ -1,5 +1,9 @@
 package config
 
 type DatabaseConfiguration struct {
-	ConnectionUri string
+	ConnectionUri   string
+	DbName          string
+	RetentionPolicy string
+	Username        string
+	Password        string
 }
