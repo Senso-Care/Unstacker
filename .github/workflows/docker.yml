@@ -13,6 +13,10 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
+      - name: Checkout submodules
+        uses: srt32/git-actions@v0.0.3
+        with:
+          args: git submodule update --init --recursive
       -
         name: Set up Docker Buildx
         id: buildx
