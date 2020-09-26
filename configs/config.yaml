@@ -10,4 +10,5 @@ database:
   username: influxdb
   password: influxdb
   dbname: sensocare
+  retentionpolicy: one_month
 cores: 6

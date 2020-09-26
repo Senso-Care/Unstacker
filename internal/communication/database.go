@@ -14,7 +14,7 @@ import (
 
 func Connect(configuration *config.DatabaseConfiguration) (influxdb2.Client, api.WriteAPI) {
 	client := influxdb2.NewClient(configuration.ConnectionUri, fmt.Sprintf("%s:%s", configuration.Username, configuration.Password))
-	writeAPI := client.WriteAPI("", configuration.DbName+"/one_month")
+	writeAPI := client.WriteAPI("", configuration.DbName+configuration.RetentionPolicy)
 	errorsCh := writeAPI.Errors()
 	// Create go proc for reading and logging errors
 	go errorLogger(errorsCh)
