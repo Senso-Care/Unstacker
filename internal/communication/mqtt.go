@@ -5,7 +5,6 @@ import (
 	"github.com/Senso-Care/Unstacker/internal/config"
 	messages "github.com/Senso-Care/Unstacker/pkg/interface"
 	"github.com/golang/protobuf/proto"
-	"github.com/influxdata/influxdb-client-go/v2/api"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -17,13 +16,13 @@ import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
-func parseAndInsert(bytes []byte, topic *string, writeAPI *api.WriteAPI) {
+func parseAndInsert(bytes []byte, topic *string, inserter InsertData) {
 	measure := messages.Measure{}
 	if err := proto.Unmarshal(bytes, &measure); err != nil {
 		log.Error("Error while decoding protobuf message ", err)
 	} else {
 		sensor := path.Base(*topic)
-		InsertMeasure(*writeAPI, &measure, &sensor)
+		inserter.InsertMeasure(&measure, &sensor)
 	}
 }
 
@@ -50,7 +49,7 @@ func createConnectionOptions(configuration *config.MqServerConfiguration, broker
 	return connOpts
 }
 
-func Listen(configuration *config.MqServerConfiguration, writeAPI *api.WriteAPI) {
+func Listen(configuration *config.MqServerConfiguration, inserter InsertData) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
@@ -58,7 +57,7 @@ func Listen(configuration *config.MqServerConfiguration, writeAPI *api.WriteAPI)
 	onMessageReceived := func(client MQTT.Client, message MQTT.Message) {
 		log.Debugf("Received message on topic: %s", message.Topic())
 		topic := message.Topic()
-		go parseAndInsert(message.Payload(), &topic, writeAPI)
+		go parseAndInsert(message.Payload(), &topic, inserter)
 	}
 	connOpts := createConnectionOptions(configuration, &broker, &onMessageReceived)
 

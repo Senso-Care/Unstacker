@@ -59,13 +59,13 @@ func main() {
 		topics[i] = "temperature-" + strconv.Itoa(rand.Int())
 	}
 	i := 0
-	start := uint64(time.Now().Unix())
-	timeToWait := uint64(10)
+	//start := uint64(time.Now().Unix())
+	//timeToWait := uint64(10)
 	for {
 		timestamp := uint64(time.Now().Unix())
-		if timestamp-start >= timeToWait {
+		/*if timestamp-start >= timeToWait {
 			break
-		}
+		}*/
 		value := rand.Float32() * 100
 		measure := messages.Measure{
 			Timestamp: &timestamp,
@@ -81,6 +81,6 @@ func main() {
 		}
 		time.Sleep(time.Second)
 	}
-	client.Disconnect(10)
-	fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, timeToWait, float64(i)/float64(timeToWait))
+	//client.Disconnect(10)
+	//fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, timeToWait, float64(i)/float64(timeToWait))
 }
