@@ -10,8 +10,10 @@ import (
 	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"os"
+	"os/signal"
 	"runtime"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -59,8 +61,10 @@ func main() {
 		topics[i] = "temperature-" + strconv.Itoa(rand.Int())
 	}
 	i := 0
-	//start := uint64(time.Now().Unix())
+	start := uint64(time.Now().Unix())
 	//timeToWait := uint64(10)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	for {
 		timestamp := uint64(time.Now().Unix())
 		/*if timestamp-start >= timeToWait {
@@ -79,8 +83,19 @@ func main() {
 			i += 1
 			log.Printf("Message sent to %s, nb %d", topic, i)
 		}
+		select {
+		case msg := <-c:
+			fmt.Println("Received shutdown signal", msg)
+			shutdown(&client, i, timestamp-start)
+		default:
+		}
 		time.Sleep(time.Second)
 	}
-	//client.Disconnect(10)
-	//fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, timeToWait, float64(i)/float64(timeToWait))
+
+}
+
+func shutdown(client *MQTT.Client, i int, duration uint64) {
+	(*client).Disconnect(10)
+	fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, duration, float64(i)/float64(duration))
+	os.Exit(0)
 }

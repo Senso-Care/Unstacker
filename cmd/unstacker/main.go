@@ -3,9 +3,12 @@ package main
 import (
 	"github.com/Senso-Care/Unstacker/internal/communication"
 	"github.com/Senso-Care/Unstacker/internal/config"
+	MQTT "github.com/eclipse/paho.mqtt.golang"
 	log "github.com/sirupsen/logrus"
 	"os"
+	"os/signal"
 	"runtime"
+	"syscall"
 )
 
 func main() {
@@ -23,7 +26,15 @@ func main() {
 	log.WithField("GOMAXPROCS", configuration.Cores).Debug("Setting max number of cpus")
 	runtime.GOMAXPROCS(configuration.Cores)
 	connector := communication.NewConnector(&configuration.Database)
-	communication.Listen(&configuration.MqServer, connector)
-	connector.Close()
+	client := communication.Listen(&configuration.MqServer, connector)
+	waitForShutdown(client, connector)
+}
 
+func waitForShutdown(client *MQTT.Client, connector *communication.InfluxDBConnector) {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	<-c
+	log.Info("Graceful shutdown")
+	(*client).Disconnect(10)
+	connector.Close()
 }

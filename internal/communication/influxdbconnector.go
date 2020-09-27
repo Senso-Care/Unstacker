@@ -19,7 +19,7 @@ type InfluxDBConnector struct {
 
 func NewConnector(configuration *config.DatabaseConfiguration) *InfluxDBConnector {
 	client := influxdb2.NewClient(configuration.ConnectionUri, fmt.Sprintf("%s:%s", configuration.Username, configuration.Password))
-	writeAPI := client.WriteAPI("", configuration.DbName+configuration.RetentionPolicy)
+	writeAPI := client.WriteAPI("", configuration.DbName+"/"+configuration.RetentionPolicy)
 	errorsCh := writeAPI.Errors()
 	connector := InfluxDBConnector{
 		InfluxClient: client,

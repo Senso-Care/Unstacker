@@ -7,10 +7,8 @@ import (
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"
 	"os"
-	"os/signal"
 	"path"
 	"strconv"
-	"syscall"
 	"time"
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
@@ -49,10 +47,7 @@ func createConnectionOptions(configuration *config.MqServerConfiguration, broker
 	return connOpts
 }
 
-func Listen(configuration *config.MqServerConfiguration, inserter InsertData) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-
+func Listen(configuration *config.MqServerConfiguration, inserter InsertData) *MQTT.Client {
 	broker := "tcp://" + configuration.HostIp + ":" + strconv.Itoa(configuration.Port)
 	onMessageReceived := func(client MQTT.Client, message MQTT.Message) {
 		log.Debugf("Received message on topic: %s", message.Topic())
@@ -69,7 +64,5 @@ func Listen(configuration *config.MqServerConfiguration, inserter InsertData) {
 		log.Infof("Connected to %s\n", broker)
 	}
 
-	<-c
-	client.Disconnect(10)
-	log.Info("Graceful shutdown")
+	return &client
 }
