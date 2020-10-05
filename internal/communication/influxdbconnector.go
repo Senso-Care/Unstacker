@@ -3,7 +3,7 @@ package communication
 import (
 	"fmt"
 	"github.com/Senso-Care/Unstacker/internal/config"
-	messages "github.com/Senso-Care/Unstacker/pkg/interface"
+	"github.com/Senso-Care/Unstacker/pkg/messages"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"

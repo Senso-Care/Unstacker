@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/Senso-Care/Unstacker/internal/config"
-	messages "github.com/Senso-Care/Unstacker/pkg/interface"
+	"github.com/Senso-Care/Unstacker/pkg/messages"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"

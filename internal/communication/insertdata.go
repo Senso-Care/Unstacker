@@ -1,6 +1,6 @@
 package communication
 
-import messages "github.com/Senso-Care/Unstacker/pkg/interface"
+import "github.com/Senso-Care/Unstacker/pkg/messages"
 
 type InsertData interface {
 	InsertMeasure(measure *messages.Measure, sensor *string)
