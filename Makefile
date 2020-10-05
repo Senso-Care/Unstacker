@@ -4,7 +4,7 @@ $(PROTOC_GEN_GO):
 	go get -u github.com/golang/protobuf/protoc-gen-go
 
 protobuf: interface/interface.proto | $(PROTOC_GEN_GO)
-	protoc --go_out=:. interface/interface.proto
+	protoc --go_out=. interface/interface.proto
 
 compile:
 	./scripts/build.sh unstacker linux/amd64
