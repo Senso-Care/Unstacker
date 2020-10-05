@@ -3,7 +3,7 @@ package communication
 import (
 	"crypto/tls"
 	"github.com/Senso-Care/Unstacker/internal/config"
-	messages "github.com/Senso-Care/Unstacker/pkg/interface"
+	"github.com/Senso-Care/Unstacker/pkg/messages"
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"
 	"os"
