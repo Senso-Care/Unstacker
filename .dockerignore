@@ -1,5 +1,4 @@
 bin/*
 vendor/*
 !vendor/modules.txt
-pkg/interface/*
 Dockerfile

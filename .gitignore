@@ -2,4 +2,3 @@
 vendor/*
 !vendor/modules.txt
 bin/*
-*.pb.go
