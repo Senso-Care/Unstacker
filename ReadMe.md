@@ -1,6 +1,6 @@
 # Unstacker
 
-Unstacker is a project from the Senso Care team. It's goal is to read messages from a MQ Server implementing the MQTT protocol and insert them into a database.
+Unstacker is a project from the Senso Care team. Its goal is to read messages from a MQ Server implementing the MQTT protocol and insert them into a database.
 
 ## Checkout project
 
@@ -39,7 +39,7 @@ SENSO_CARE_MQSERVER_PASSWORD=go_is_great
 
 ## Unstacker help
 ```
-Usage of unstacker:
+Usage of unstackerd:
   -c, --config string              Path to YAML config file
       --cores int                  Number of cores to use
       --db-connection-uri string   Database connection uri (default "http://localhost:9999")
