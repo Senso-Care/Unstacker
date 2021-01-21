@@ -7,9 +7,9 @@ protobuf: interface/interface.proto | $(PROTOC_GEN_GO)
 	protoc --go_out=. interface/interface.proto
 
 compile:
-	./scripts/build.sh unstacker linux/amd64
-	./scripts/build.sh unstacker linux/arm64
-	#./scripts/build.sh sender linux/amd64
+	./scripts/build.sh unstackerd linux/amd64
+	./scripts/build.sh unstackerd linux/arm64
+	#./scripts/build.sh unstacker linux/amd64
 
 clean:
 	echo "Cleaning build directory"
@@ -17,7 +17,7 @@ clean:
 	rm pkg/messages/*.pb.go || true
 
 run:
-	go run ./cmd/unstacker -config ./configs/config.yaml
+	go run ./cmd/unstackerd -config ./configs/config.yaml
 
 all: clean protobuf compile
 

@@ -21,4 +21,4 @@ fi
 
 cmd_path="./cmd/$1"
 echo "Compiling $1 on $os/$platform"
-CGO_ENABLED=0 GOOS=$os GOARCH=$platform go build -o="bin/$2/$1" -mod=vendor "github.com/Senso-Care/Unstacker/$cmd_path"
+CGO_ENABLED=0 GOOS=$os GOARCH=$platform go build -o="bin/$2/$1" -x "./$cmd_path"
