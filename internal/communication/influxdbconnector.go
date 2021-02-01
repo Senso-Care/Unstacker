@@ -2,14 +2,15 @@ package communication
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/Senso-Care/Unstacker/internal/config"
 	"github.com/Senso-Care/Unstacker/pkg/messages"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
 	log "github.com/sirupsen/logrus"
-	"strings"
-	"time"
 )
 
 type InfluxDBConnector struct {
@@ -45,9 +46,9 @@ func (connector *InfluxDBConnector) InsertMeasure(measure *messages.Measure, sen
 }
 
 func MeasureToPoint(measure *messages.Measure, sensor *string) *write.Point {
-	measurement := strings.Split(*sensor, "-")[0]
+	measurement := strings.ToLower(strings.Split(*sensor, "-")[0])
 	point := influxdb2.NewPointWithMeasurement(measurement).
-		AddTag("sensor", *sensor).
+		AddTag("sensor", strings.ToLower(*sensor)).
 		AddField("v", fmt.Sprintf("%f", *measure.Value)).
 		SetTime(time.Unix(int64(*measure.Timestamp), 0))
 	return point
