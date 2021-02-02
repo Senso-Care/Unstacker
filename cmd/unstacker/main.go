@@ -3,11 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/Senso-Care/Unstacker/internal/config"
-	"github.com/Senso-Care/Unstacker/pkg/messages"
-	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"github.com/golang/protobuf/proto"
-	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -15,6 +10,12 @@ import (
 	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/Senso-Care/Unstacker/internal/config"
+	"github.com/Senso-Care/Unstacker/pkg/messages"
+	MQTT "github.com/eclipse/paho.mqtt.golang"
+	"github.com/golang/protobuf/proto"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -56,26 +57,30 @@ func main() {
 		return
 	}
 	fmt.Printf("Connected to %s\n", broker)
-	topics := [5]string{
-		"temperature-bathroom",
-		"temperature-kitchen",
-		"temperature-wc",
-		"temperature-livingroom",
-		"temperature-bedroom",
+
+	topics := [1]string{
+		//"sound-wc",
+		//"sound-bathroom",
+		//"sound-kitchen",
+		//"sound-livingroom",
+		"sound-bedroom",
 	}
 	i := 0
-	start := uint64(time.Now().Unix())
+	start := time.Now().Unix()
 	//timeToWait := uint64(10)
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	for {
-		timestamp := uint64(time.Now().Unix())
+
+	nb := 7 * 24
+	timestamp := time.Now().Unix() - (7 * 24 * 60 * 60)
+	for count := 0; count < nb; count++ {
+		timestamp = timestamp + (60 * 60)
 		for _, topic := range topics {
 			topic = "/senso-care/sensors/" + topic
-			value := float32(rand.Int31n(20)) + 10 + rand.Float32()
+			value := float32(rand.Int31n(35-25)) + 25 + rand.Float32()
 			measure := messages.Measure{
-				Timestamp: &timestamp,
-				Value:     &value,
+				Timestamp: timestamp,
+				Value:     &messages.Measure_FValue{FValue: value},
 			}
 			if bytes, err := proto.Marshal(&measure); err != nil {
 				log.Println("Error while unmarshalling: ", err)
@@ -88,18 +93,18 @@ func main() {
 		}
 		i += 1
 
-		select {
+		/*select {
 		case msg := <-c:
 			fmt.Println("Received shutdown signal", msg)
 			shutdown(&client, i, timestamp-start)
 		default:
-		}
-		time.Sleep(10 * time.Second)
+		}*/
+		time.Sleep(10 * time.Millisecond)
 	}
-
+	shutdown(&client, i, timestamp-start)
 }
 
-func shutdown(client *MQTT.Client, i int, duration uint64) {
+func shutdown(client *MQTT.Client, i int, duration int64) {
 	(*client).Disconnect(10)
 	fmt.Printf("n: %d, t: %d, msg/s: %f\n", i, duration, float64(i)/float64(duration))
 	os.Exit(0)

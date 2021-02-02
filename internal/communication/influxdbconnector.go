@@ -41,15 +41,33 @@ func (connector *InfluxDBConnector) Close() {
 
 func (connector *InfluxDBConnector) InsertMeasure(measure *messages.Measure, sensor *string) {
 	point := MeasureToPoint(measure, sensor)
-	log.Infof("Inserting %s", measure)
-	connector.WriteApi.WritePoint(point)
+	if point != nil {
+		log.Infof("Inserting %s", measure)
+		connector.WriteApi.WritePoint(point)
+	}
 }
 
 func MeasureToPoint(measure *messages.Measure, sensor *string) *write.Point {
 	measurement := strings.ToLower(strings.Split(*sensor, "-")[0])
+	var timestamp time.Time
+	if measure.Timestamp == 0 {
+		timestamp = time.Now()
+	} else {
+		timestamp = time.Unix(measure.Timestamp, 0)
+	}
+	var value interface{}
+	switch tmpValue := measure.Value.(type) {
+	case *messages.Measure_FValue:
+		value = tmpValue.FValue
+	case *messages.Measure_IValue:
+		value = tmpValue.IValue
+	default:
+		log.Error("Error, no value present in message")
+		return nil
+	}
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("sensor", strings.ToLower(*sensor)).
-		AddField("v", fmt.Sprintf("%f", *measure.Value)).
-		SetTime(time.Unix(int64(*measure.Timestamp), 0))
+		AddField("v", value).
+		SetTime(timestamp)
 	return point
 }

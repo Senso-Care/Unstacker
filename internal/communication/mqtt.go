@@ -2,20 +2,22 @@ package communication
 
 import (
 	"crypto/tls"
-	"github.com/Senso-Care/Unstacker/internal/config"
-	"github.com/Senso-Care/Unstacker/pkg/messages"
-	"github.com/golang/protobuf/proto"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"path"
 	"strconv"
 	"time"
+
+	"github.com/Senso-Care/Unstacker/internal/config"
+	"github.com/Senso-Care/Unstacker/pkg/messages"
+	"github.com/golang/protobuf/proto"
+	log "github.com/sirupsen/logrus"
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
 func parseAndInsert(bytes []byte, topic *string, inserter InsertData) {
 	measure := messages.Measure{}
+	log.Debug("Payload size: ", len(bytes))
 	if err := proto.Unmarshal(bytes, &measure); err != nil {
 		log.Error("Error while decoding protobuf message ", err)
 	} else {
