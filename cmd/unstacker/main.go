@@ -62,8 +62,8 @@ func main() {
 		//"sound-wc",
 		//"sound-bathroom",
 		//"sound-kitchen",
-		//"sound-livingroom",
-		"sound-bedroom",
+		"sound-livingroom",
+		//"sound-bedroom",
 	}
 	i := 0
 	start := time.Now().Unix()
@@ -77,10 +77,11 @@ func main() {
 		timestamp = timestamp + (60 * 60)
 		for _, topic := range topics {
 			topic = "/senso-care/sensors/" + topic
-			value := float32(rand.Int31n(35-25)) + 25 + rand.Float32()
+			//value := float32(rand.Int31n(35-25)) + 25 + rand.Float32()
+			value := rand.Int31n(35-25) + 25
 			measure := messages.Measure{
 				Timestamp: timestamp,
-				Value:     &messages.Measure_FValue{FValue: value},
+				Value:     &messages.Measure_IValue{IValue: value},
 			}
 			if bytes, err := proto.Marshal(&measure); err != nil {
 				log.Println("Error while unmarshalling: ", err)
