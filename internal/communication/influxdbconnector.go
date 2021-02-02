@@ -67,7 +67,7 @@ func MeasureToPoint(measure *messages.Measure, sensor *string) *write.Point {
 	}
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("sensor", strings.ToLower(*sensor)).
-		AddField("v", value).
+		AddField("v", fmt.Sprintf("%f", value)).
 		SetTime(timestamp)
 	return point
 }
