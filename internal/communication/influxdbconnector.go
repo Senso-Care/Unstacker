@@ -55,12 +55,12 @@ func MeasureToPoint(measure *messages.Measure, sensor *string) *write.Point {
 	} else {
 		timestamp = time.Unix(measure.Timestamp, 0)
 	}
-	var value interface{}
+	var value float32
 	switch tmpValue := measure.Value.(type) {
 	case *messages.Measure_FValue:
 		value = tmpValue.FValue
 	case *messages.Measure_IValue:
-		value = tmpValue.IValue
+		value = float32(tmpValue.IValue)
 	default:
 		log.Error("Error, no value present in message")
 		return nil
